@@ -1,8 +1,7 @@
 import { ScrollView, View } from "react-native";
-import Hero from "../components/home/hero";
-import ServiceTimesCard from "../components/home/service-times-card";
-import MapCard from "../components/home/map-card";
-import BottomTab from "../components/home/bottom-tab";
+import Hero from "../../components/home/hero";
+import ServiceTimesCard from "../../components/home/service-times-card";
+import MapCard from "../../components/home/map-card";
 
 export default function HomeScreen() {
 	return (
@@ -13,12 +12,11 @@ export default function HomeScreen() {
 				showsVerticalScrollIndicator={false}
 			>
 				<Hero />
-				<View className="px-5">
+				<View className="px-4 ">
 					<ServiceTimesCard />
 					<MapCard />
 				</View>
 			</ScrollView>
-			<BottomTab />
 		</View>
 	);
 }
