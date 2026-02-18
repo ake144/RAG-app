@@ -12,7 +12,10 @@ export default function Layout() {
           headerShown: false,
           contentStyle: { backgroundColor: "#f1f5f9" }, // slate-100
         }}
-      />
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="faq" options={{ presentation: 'modal' }} />
+      </Stack>
     </SafeAreaProvider>
   );
 }

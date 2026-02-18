@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const MENU_ITEMS = [
   { label: "New Here", icon: "hand-left-outline", route: "/faq" },
@@ -12,10 +13,11 @@ const MENU_ITEMS = [
 
 export default function MoreScreen() {
     const router = useRouter();
+    const insets = useSafeAreaInsets();
     
     return (
-        <ScrollView className="flex-1 bg-slate-50 pt-10">
-            <View className="px-6 mb-6">
+        <ScrollView className="flex-1 bg-slate-50" contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 100 }}>
+            <View className="px-6 mb-6 pt-4">
                  <Text className="text-2xl font-bold text-slate-900">More</Text>
             </View>
             

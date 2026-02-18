@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import Animated, { FadeInUp, FadeOutUp, Layout } from "react-native-reanimated";
+// import Animated, { FadeInUp, FadeOutUp, Layout } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // FAQ Data with categories
 const FAQ_CATEGORIES = [
@@ -20,7 +21,7 @@ const FAQ_ITEMS = [
     answer: "We have services every Sunday at 9:00 AM and 11:00 AM. Join us for coffee 30 minutes beforehand in the main lobby!",
     category: "service",
     iconName: "time-outline", // Ionicons
-    isHighlighted: true, // Specific styling for this one per screenshot
+    isHighlighted: true, 
   },
   {
     id: 2,
@@ -54,31 +55,15 @@ const FAQ_ITEMS = [
 
 export default function FAQScreen() {
   const router = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState("new-here"); // Default active tab in screenshot looks like 'New Here'
-  const [expandedId, setExpandedId] = useState<number | null>(1); // 1 is expanded in screenshot
+  const insets = useSafeAreaInsets();
+  const [selectedCategory, setSelectedCategory] = useState("new-here");
+  const [expandedId, setExpandedId] = useState<number | null>(1);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredFAQs = FAQ_ITEMS.filter((item) => {
-    // If we want filtering by category AND search
-    // Currently screenshot highlights "New Here", so likely filtering by category.
-    // However, if search is active, maybe show all matches?
-    // Let's implement filtering logic:
-    const matchesSearch = item.question.toLowerCase().includes(searchQuery.toLowerCase());
-    // In screenshot, "New Here" is selected but "What time are services?" (Service category) is shown.
-    // Wait, the screenshot has "New Here" selected BUT the expanded item is "What time are services?".
-    // Maybe "New Here" is just one filter button, and "What time are services?" is relevant for New Here too?
-    // Or maybe the screenshot shows "New Here" active but the content is mixed?
-    // Typical behavior: Filters filter the list.
-    // Let's assume the user wants filtering.
-    // If "New Here" is active, show items relevant to new people.
-    
-    // For simplicity, let's just use search if query exists, otherwise strict category?
-    // Or maybe loose connection?
-    // Let's just show all for now if search is empty, but highlighted category style.
-    // Actually, "What time are services?" is usually important for "New Here".
-    // I'll skip strict category filtering for this demo to ensure items show up, 
-    // but implement the UI selection state.
-      return matchesSearch;
+      // Basic search filter
+      if (!searchQuery) return true;
+      return item.question.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   const toggleExpand = (id: number) => {
@@ -86,9 +71,10 @@ export default function FAQScreen() {
   };
 
   return (
-    <>
+    <View className="flex-1 bg-white" style={{ flex: 1 }}>
       <Stack.Screen
           options={{
+              headerShown: true, // Ensure header is shown
               title: "FAQ",
               headerTitleAlign: "center",
               headerStyle: { backgroundColor: "#fff" },
@@ -97,10 +83,14 @@ export default function FAQScreen() {
                       <Ionicons name="arrow-back" size={24} color="#000" />
                   </TouchableOpacity>
               ),
-              headerShadowVisible: false, // Clean look like screenshot
+              headerShadowVisible: false,
+              contentStyle: { backgroundColor: "#fff" }, // Ensure white background
           }}
       />
-      <View className="flex-1 bg-white">
+      <View 
+        className="flex-1 bg-white" 
+        style={{ paddingBottom: insets.bottom }} // Handle bottom safe area
+      >
         {/* Search Bar */}
         <View className="px-5 pt-2 pb-4">
           <View className="flex-row items-center bg-slate-100 rounded-full px-4 py-3 border border-slate-200">
@@ -146,7 +136,7 @@ export default function FAQScreen() {
             const isExpanded = expandedId === item.id;
             
             return (
-              <Animated.View layout={Layout.springify()} key={item.id} className="mb-3">
+              <View key={item.id} className="mb-3">
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={() => toggleExpand(item.id)}
@@ -173,35 +163,20 @@ export default function FAQScreen() {
                   </View>
                   
                   {isExpanded && (
-                    <Animated.View entering={FadeInUp} check-exiting={FadeOutUp} className="px-4 pb-4">
+                    <View className="px-4 pb-4">
                         <View className="pl-13 pr-2">
                              <Text className="text-slate-600 leading-relaxed">
                                 {item.answer}
                             </Text>
                         </View>
-                    </Animated.View>
+                    </View>
                   )}
                 </TouchableOpacity>
-              </Animated.View>
+              </View>
             );
           })}
         </ScrollView>
-
-        {/* Bottom Contact Section */}
-        <View className="absolute bottom-0 left-0 right-0 bg-white pt-4 pb-10 px-5 border-t border-slate-100 items-center">
-            <View className="bg-blue-100 w-12 h-12 rounded-full items-center justify-center mb-3">
-                <Ionicons name="chatbox" size={24} color="#2563eb" />
-            </View>
-            <Text className="text-lg font-bold text-slate-800 mb-1">Still have questions?</Text>
-            <Text className="text-slate-500 text-center text-sm mb-4 px-10">
-                We'd love to hear from you. Chat with us directly or send us an email.
-            </Text>
-            
-            <TouchableOpacity className="w-full bg-blue-500 py-3.5 rounded-xl items-center shadow-md shadow-blue-200">
-                <Text className="text-white font-bold text-base">Contact Us</Text>
-            </TouchableOpacity>
-        </View>
       </View>
-    </>
+    </View>
   );
 }
