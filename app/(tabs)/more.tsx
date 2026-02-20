@@ -7,6 +7,7 @@ const MENU_ITEMS = [
   { label: "New Here", icon: "hand-left-outline", route: "/faq" },
   { label: "Give", icon: "heart-outline", route: "/(tabs)/give" },
   { label: "Prayer Request", icon: "chatbox-ellipses-outline", route: "/faq" },
+  { label: "Ask AI Assistant", icon: "sparkles-outline", route: "/support-chat" }, // New support chat link
   { label: "FAQ", icon: "help-circle-outline", route: "/faq" },
   { label: "Contact Us", icon: "call-outline", route: "/faq" },
 ];
