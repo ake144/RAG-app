@@ -27,6 +27,10 @@ const CHURCH_DOCS = [
     content: "We believe in the Trinity: Father, Son, and Holy Spirit. We believe the Bible is the inspired word of God.",
   },
   {
+    title: "Start Times",
+    content: "Services begin promptly at 9am and 11am.",
+  },
+  {
     title: "Location",
     content: "Our church is located at 123 Faith Street, Downtown City. Parking is available on the north side.",
   },
